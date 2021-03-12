@@ -1,4 +1,4 @@
-name: NanoPi-R2S RK3328 OpenWrt 19.07 Build
+name: GL-INET B1300 OpenWrt Build
 
 on:
   push:
@@ -68,7 +68,7 @@ jobs:
           mkdir -p ./artifact/
           cp openwrt/out/*.img.zip ./artifact/
           cp openwrt/.config ./artifact/
-          
+
       - name: Upload Artifact
         uses: actions/upload-artifact@master
         with:
