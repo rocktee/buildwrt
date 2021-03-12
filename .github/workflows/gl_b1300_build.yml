@@ -34,12 +34,19 @@ jobs:
           libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake \
           libtool autopoint device-tree-compiler g++-multilib antlr3 gperf \
           wget curl swig rsync
+      - name: Print Disk Space Before
+        run: |
           df -H
       - name: Download Source
         run: |
           rm -fr openwrt
           git clone https://github.com/coolsnowwolf/lede openwrt
-          
+
+      - name: Install Extra Packages
+        run: |
+          cd openwrt/package
+          git clone https://github.com/rufengsuixing/luci-app-adguardhome
+
       - name: Update Feeds		
         run: |		
           cd openwrt
@@ -66,7 +73,7 @@ jobs:
       - name: Compile OpenWrt
         run: |
           cd openwrt
-          make -j$(nproc) || make -j1 V=s
+          make -j1 V=s
 
       - name: Print Disk Space After
         run: |
@@ -83,10 +90,11 @@ jobs:
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
-          rm -rf $(find ./bin/targets/ -type d -name "packages")
-          cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
-          cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          # rm -rf $(find ./bin/targets/ -type d -name "packages")
+          # cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
+          # cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          # cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          cp -rf $(find ./bin/targets/ -type f -name "*.bin") ./artifact/firmware/
       
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
@@ -104,7 +112,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: OpenWrt_firmware
-          path: ./bin/targets/
+          path: ./artifact/firmware/
   
 
       # - name: Upload release asset
