@@ -77,6 +77,7 @@ jobs:
 
       - name: Print Disk Space After
         run: |
+          cd openwrt
           df -h
           echo "======================="
           echo "Space usage:"
@@ -90,11 +91,11 @@ jobs:
           mkdir -p ./artifact/firmware
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
-          # rm -rf $(find ./bin/targets/ -type d -name "packages")
-          # cp -rf $(find ./bin/targets/ -type f) ./artifact/firmware/
-          # cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
-          # cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
-          cp -rf $(find ./bin/targets/ -type f -name "*.bin") ./artifact/firmware/
+          # rm -rf $(find ./openwrt/bin/targets/ -type d -name "packages")
+          # cp -rf $(find ./openwrt/bin/targets/ -type f) ./artifact/firmware/
+          # cp -rf $(find ./openwrt/bin/packages/ -type f -name "*.ipk") ./artifact/package/
+          cp -rf $(find ./openwrt/bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+          cp -rf $(find ./openwrt/bin/targets/ -type f -name "*.bin") ./artifact/firmware/
       
       - name: Deliver buildinfo
         uses: actions/upload-artifact@v2
